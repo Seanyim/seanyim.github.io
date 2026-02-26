@@ -124,55 +124,45 @@
 </section>
 
 <div class="container" style="max-width: 700px;">
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1rem;">
+        <input type="text" id="search-input" placeholder="Search tweets..."
+            style="width: 100%; padding: 0.75rem 1.25rem; border-radius: 99px; border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary); outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--color-accent)'" onblur="this.style.borderColor='var(--color-border)'"
+            oninput="performSearch()">
+    </div>
+
     <div class="filter-container">
-        <button class="filter-chip active" onclick="filterItems('all', '.tweet-card')">All</button>
+        <button class="filter-chip active" onclick="filterItemsWithSearch('all', this)">All</button>
         
         
-            
-                
-                <button class="filter-chip" onclick="filterItems('General', '.tweet-card')">General</button>
-            
         
-            
-                
-                <button class="filter-chip" onclick="filterItems('tech', '.tweet-card')">tech</button>
-            
         
-            
+        <button class="filter-chip" onclick="filterItemsWithSearch('tech', this)">tech</button>
         
-            
         
-            
-                
-                <button class="filter-chip" onclick="filterItems('Life', '.tweet-card')">Life</button>
-            
         
-            
+        
+        
+        
+        <button class="filter-chip" onclick="filterItemsWithSearch('General', this)">General</button>
+        
+        
+        
+        
+        <button class="filter-chip" onclick="filterItemsWithSearch('Life', this)">Life</button>
+        
+        
+        
         
     </div>
 
     
-    <div class="card tweet-card" data-category="General">
-        <div class="tweet-header">
-            <div class="tweet-avatar">
-                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-            </div>
-            <div class="tweet-meta">
-                <span class="tweet-name">Sean </span>
-                <span class="tweet-date">2026-02-26 16:26</span>
-                <span style="font-size: 12px; color: var(--color-accent); margin-left: 0.5rem;">General</span>
-            </div>
-        </div>
-        <div class="tweet-content">
-            Now, my web updates some fancy things! Check it out!
-        </div>
-        
-    </div>
-    
     <div class="card tweet-card" data-category="tech">
         <div class="tweet-header">
             <div class="tweet-avatar">
-                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="/assets/img/avatar.jpeg" alt="Sean "
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="tweet-meta">
                 <span class="tweet-name">Sean </span>
@@ -189,7 +179,8 @@
     <div class="card tweet-card" data-category="tech">
         <div class="tweet-header">
             <div class="tweet-avatar">
-                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="/assets/img/avatar.jpeg" alt="Sean "
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="tweet-meta">
                 <span class="tweet-name">Sean </span>
@@ -206,7 +197,8 @@
     <div class="card tweet-card" data-category="General">
         <div class="tweet-header">
             <div class="tweet-avatar">
-                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="/assets/img/avatar.jpeg" alt="Sean "
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="tweet-meta">
                 <span class="tweet-name">Sean </span>
@@ -223,7 +215,8 @@
     <div class="card tweet-card" data-category="Life">
         <div class="tweet-header">
             <div class="tweet-avatar">
-                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="/assets/img/avatar.jpeg" alt="Sean "
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="tweet-meta">
                 <span class="tweet-name">Sean </span>
@@ -240,7 +233,8 @@
     <div class="card tweet-card" data-category="Life">
         <div class="tweet-header">
             <div class="tweet-avatar">
-                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="/assets/img/avatar.jpeg" alt="Sean "
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="tweet-meta">
                 <span class="tweet-name">Sean </span>
@@ -265,6 +259,34 @@
         const rawMarkdown = fullContent.querySelector('.markdown-body').innerText;
         const htmlContent = fullContent.innerHTML.replace(rawMarkdown, marked.parse(rawMarkdown));
         openModal(htmlContent);
+    }
+
+    let currentCategoryFilter = 'all';
+
+    function filterItemsWithSearch(category, btn) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        currentCategoryFilter = category;
+        performSearch();
+    }
+
+    function performSearch() {
+        const searchInput = document.getElementById('search-input');
+        const query = searchInput ? searchInput.value.toLowerCase() : '';
+        const items = document.querySelectorAll('.tweet-card');
+
+        items.forEach(item => {
+            const content = item.querySelector('.tweet-content').textContent.toLowerCase();
+            const cat = item.dataset.category || '';
+            const categoryMatch = currentCategoryFilter === 'all' || cat === currentCategoryFilter;
+            const textMatch = content.includes(query) || cat.toLowerCase().includes(query);
+
+            if (categoryMatch && textMatch) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     }
 </script>
 

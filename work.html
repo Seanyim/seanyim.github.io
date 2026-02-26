@@ -124,23 +124,29 @@
 </section>
 
 <style>
-    .category-section { margin-bottom: 4rem; }
-    .category-title { 
-        font-size: 1.5rem; 
-        color: var(--color-text-primary); 
-        margin-bottom: 2rem; 
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+    .category-section {
+        margin-bottom: 4rem;
+    }
+
+    .category-title {
+        font-size: 1.5rem;
+        color: var(--color-text-primary);
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         padding-bottom: 0.5rem;
         display: flex;
         align-items: center;
         gap: 0.75rem;
     }
-    .category-icon-header { color: #22c55e; }
-    
+
+    .category-icon-header {
+        color: #22c55e;
+    }
+
     /* Auto-Avatar SVGs defined as macros or variables not easy in Jinja loop without defining first.
        We will do inline conditional logic for icons. 
     */
-    
+
     /* Ensure modal is perfectly centered */
     .project-modal {
         inset: 0;
@@ -148,19 +154,28 @@
         position: fixed;
         max-width: 800px;
         width: 90%;
-        max-height: 90vh; /* Allow it to fit */
+        max-height: 90vh;
+        /* Allow it to fit */
     }
 </style>
 
 <div class="container">
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1rem;">
+        <input type="text" id="search-input" placeholder="Search projects..."
+            style="width: 100%; max-width: 400px; padding: 0.75rem 1.25rem; border-radius: 99px; border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary); outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--color-accent)'" onblur="this.style.borderColor='var(--color-border)'"
+            oninput="performSearch()">
+    </div>
+
     <!-- Filter Chips -->
     <div class="filter-container" style="margin-bottom: 2rem;">
         <button class="filter-chip active" onclick="filterSections('all', this)">All</button>
         
         
-            <button class="filter-chip" onclick="filterSections('CHIP', this)">CHIP</button>
+        <button class="filter-chip" onclick="filterSections('CHIP', this)">CHIP</button>
         
-            <button class="filter-chip" onclick="filterSections('Code', this)">Code</button>
+        <button class="filter-chip" onclick="filterSections('Code', this)">Code</button>
         
     </div>
 
@@ -170,15 +185,18 @@
             <!-- Icon Logic based on Category Name -->
             <span class="category-icon-header">
                 
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                </svg>
                 
             </span>
             CHIP
         </h2>
-        
+
         <div class="projects-grid">
             
-            <article class="project-card card" onclick='openProjectModal({"category": "CHIP", "description": "High-Performance Edge Computing Architecture designed for AI inference.", "details": "### Overview\nThis project involves the design and implementation of a 5-stage pipelined RISC-V processor core. The goal was to optimize for performance-per-watt in edge AI scenarios.\n\n### Tech Stack\n- **Verilog/SystemVerilog**\n- **C++**\n- **FPGA (Xilinx)**\n- **Chisel**\n\n### Technical Details\n- **ISA Support**: RV64IMAC (Integer, Multiply, Atomic, Compressed).\n- **Pipeline**: 5-Stage (Fetch, Decode, Execute, Memory, Writeback) with forwarding unit.\n- **Branch Prediction**: Dynamic 2-bit saturating counter + BTB.\n- **Memory System**: Direct-mapped I-Cache and 2-way set-associative D-Cache.\n\n### Outcome\nSuccessfully synthesized on Xilinx Artix-7 FPGA running at 100MHz. Capable of booting custom RTOS and running quantized neural network inference.", "id": 1, "link": "# CHIP", "title": "RISC-V Efficient Core"})' style="cursor: pointer; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <article class="project-card card" onclick='openProjectModal({"category": "CHIP", "description": "High-Performance Edge Computing Architecture designed for AI inference.", "details": "### Overview\nThis project involves the design and implementation of a 5-stage pipelined RISC-V processor core. The goal was to optimize for performance-per-watt in edge AI scenarios.\n\n### Tech Stack\n- **Verilog/SystemVerilog**\n- **C++**\n- **FPGA (Xilinx)**\n- **Chisel**\n\n### Technical Details\n- **ISA Support**: RV64IMAC (Integer, Multiply, Atomic, Compressed).\n- **Pipeline**: 5-Stage (Fetch, Decode, Execute, Memory, Writeback) with forwarding unit.\n- **Branch Prediction**: Dynamic 2-bit saturating counter + BTB.\n- **Memory System**: Direct-mapped I-Cache and 2-way set-associative D-Cache.\n\n### Outcome\nSuccessfully synthesized on Xilinx Artix-7 FPGA running at 100MHz. Capable of booting custom RTOS and running quantized neural network inference.", "id": 1, "link": "# CHIP", "title": "RISC-V Efficient Core"})'
+                style="cursor: pointer; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
                 
                 <div class="card-content" style="padding: 1.5rem;">
                     <h3 class="project-title" style="margin-top: 0;">RISC-V Efficient Core</h3>
@@ -194,15 +212,18 @@
             <!-- Icon Logic based on Category Name -->
             <span class="category-icon-header">
                 
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                </svg>
                 
             </span>
             Code
         </h2>
-        
+
         <div class="projects-grid">
             
-            <article class="project-card card" onclick='openProjectModal({"category": "Code", "description": "Quantitative Analysis \u0026 Sentiment Engine for high-frequency trading markets.", "details": "### Overview\nMarket Alpha AI is a proprietary research tool designed to identify arbitrage opportunities in high-frequency trading markets. By combining technical indicators with sentiment analysis from news sources and social media, the system provides a holistic view of market health.\n\n### Tech Stack\n- **Python**\n- **PyTorch**\n- **FastAPI**\n- **React**\n- **PostgreSQL**\n\n### Key Features\n- **Real-time Anomaly Detection**: Identifies price deviations \u003e3\u03c3 using LSTM networks.\n- **Sentiment Polarity Scoring**: NLP pipeline processing 50k+ news items daily.\n- **Backtesting Engine**: Simulate strategies against 10 years of historical tick data.\n\n### Architecture Highlight\nThe core engine uses a distributed microservices architecture. The specialized **Inference Service** is optimized for low-latency (\u003c5ms) predictions, crucial for HFT environments.", "id": 2, "link": "#", "title": "Market Alpha AI"})' style="cursor: pointer; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <article class="project-card card" onclick='openProjectModal({"category": "Code", "description": "Quantitative Analysis \u0026 Sentiment Engine for high-frequency trading markets.", "details": "### Overview\nMarket Alpha AI is a proprietary research tool designed to identify arbitrage opportunities in high-frequency trading markets. By combining technical indicators with sentiment analysis from news sources and social media, the system provides a holistic view of market health.\n\n### Tech Stack\n- **Python**\n- **PyTorch**\n- **FastAPI**\n- **React**\n- **PostgreSQL**\n\n### Key Features\n- **Real-time Anomaly Detection**: Identifies price deviations \u003e3\u03c3 using LSTM networks.\n- **Sentiment Polarity Scoring**: NLP pipeline processing 50k+ news items daily.\n- **Backtesting Engine**: Simulate strategies against 10 years of historical tick data.\n\n### Architecture Highlight\nThe core engine uses a distributed microservices architecture. The specialized **Inference Service** is optimized for low-latency (\u003c5ms) predictions, crucial for HFT environments.", "id": 2, "link": "#", "title": "Market Alpha AI"})'
+                style="cursor: pointer; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
                 
                 <div class="card-content" style="padding: 1.5rem;">
                     <h3 class="project-title" style="margin-top: 0;">Market Alpha AI</h3>
@@ -218,30 +239,36 @@
 <dialog id="project-modal" class="project-modal">
     <div class="project-modal-content">
         <button class="project-modal-close" onclick="closeProjectModal()">&times;</button>
-        <img id="modal-cover" src="" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem; display: none;">
+        <img id="modal-cover" src=""
+            style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem; display: none;">
         <h2 id="modal-title" style="margin-top: 0; font-size: 2rem; color: #0f172a;"></h2>
         <div style="margin-bottom: 1rem;">
             <span id="modal-category" class="tech-badge" style="background: #e2e8f0; color: #475569;"></span>
         </div>
         <div id="modal-body" style="line-height: 1.6;"></div>
-        <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button onclick="shareItem('project')" class="btn-primary" style="border: none; cursor: pointer; display: inline-block; text-decoration: none; color: white; background: #22c55e; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Copy Link</button>
-            <a id="modal-link" href="#" target="_blank" class="btn-primary" style="display: none; text-decoration: none; color: white; background: #475569; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Visit Website</a>
+        <div
+            style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="shareItem('project')" class="btn-primary"
+                style="border: none; cursor: pointer; display: inline-block; text-decoration: none; color: white; background: #22c55e; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Copy
+                Link</button>
         </div>
     </div>
 </dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
+    const projectsData = [{"category": "CHIP", "description": "High-Performance Edge Computing Architecture designed for AI inference.", "details": "### Overview\nThis project involves the design and implementation of a 5-stage pipelined RISC-V processor core. The goal was to optimize for performance-per-watt in edge AI scenarios.\n\n### Tech Stack\n- **Verilog/SystemVerilog**\n- **C++**\n- **FPGA (Xilinx)**\n- **Chisel**\n\n### Technical Details\n- **ISA Support**: RV64IMAC (Integer, Multiply, Atomic, Compressed).\n- **Pipeline**: 5-Stage (Fetch, Decode, Execute, Memory, Writeback) with forwarding unit.\n- **Branch Prediction**: Dynamic 2-bit saturating counter + BTB.\n- **Memory System**: Direct-mapped I-Cache and 2-way set-associative D-Cache.\n\n### Outcome\nSuccessfully synthesized on Xilinx Artix-7 FPGA running at 100MHz. Capable of booting custom RTOS and running quantized neural network inference.", "id": 1, "link": "# CHIP", "title": "RISC-V Efficient Core"}, {"category": "Code", "description": "Quantitative Analysis \u0026 Sentiment Engine for high-frequency trading markets.", "details": "### Overview\nMarket Alpha AI is a proprietary research tool designed to identify arbitrage opportunities in high-frequency trading markets. By combining technical indicators with sentiment analysis from news sources and social media, the system provides a holistic view of market health.\n\n### Tech Stack\n- **Python**\n- **PyTorch**\n- **FastAPI**\n- **React**\n- **PostgreSQL**\n\n### Key Features\n- **Real-time Anomaly Detection**: Identifies price deviations \u003e3\u03c3 using LSTM networks.\n- **Sentiment Polarity Scoring**: NLP pipeline processing 50k+ news items daily.\n- **Backtesting Engine**: Simulate strategies against 10 years of historical tick data.\n\n### Architecture Highlight\nThe core engine uses a distributed microservices architecture. The specialized **Inference Service** is optimized for low-latency (\u003c5ms) predictions, crucial for HFT environments.", "id": 2, "link": "#", "title": "Market Alpha AI"}];
     let currentSharedItem = null;
+    let currentSharedProjectData = null;
 
-    function openProjectModal(project) {
+    function openProjectModal(project, updateUrl = true) {
         currentSharedItem = { title: project.title, text: project.description };
+        currentSharedProjectData = project;
         const modal = document.getElementById('project-modal');
         const coverImg = document.getElementById('modal-cover');
         document.getElementById('modal-title').textContent = project.title;
         document.getElementById('modal-category').textContent = project.category;
-        
+
         if (project.cover_url) {
             coverImg.src = project.cover_url;
             coverImg.style.display = 'block';
@@ -249,22 +276,19 @@
             coverImg.style.display = 'none';
             coverImg.src = "";
         }
-        
+
         // Use Details if available, else Description. Convert newlines to <br> for simple formatting
         const rawContent = project.details || project.description || "";
-        
+
         if (typeof marked !== 'undefined') {
-             document.getElementById('modal-body').innerHTML = marked.parse(rawContent);
+            document.getElementById('modal-body').innerHTML = marked.parse(rawContent);
         } else {
-             document.getElementById('modal-body').innerHTML = rawContent.replace(/\n/g, '<br>');
+            document.getElementById('modal-body').innerHTML = rawContent.replace(/\n/g, '<br>');
         }
 
-        const linkBtn = document.getElementById('modal-link');
-        if (project.link) {
-            linkBtn.href = project.link;
-            linkBtn.style.display = 'inline-block';
-        } else {
-            linkBtn.style.display = 'none';
+        if (updateUrl) {
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + project.id;
+            window.history.pushState({ path: newUrl }, '', newUrl);
         }
 
         modal.showModal();
@@ -273,6 +297,8 @@
     function closeProjectModal() {
         const modal = document.getElementById('project-modal');
         modal.close();
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({ path: newUrl }, '', newUrl);
     }
 
     // Close on click outside
@@ -283,8 +309,8 @@
     });
 
     async function shareItem() {
-        if (!currentSharedItem) return;
-        const url = window.location.href; 
+        if (!currentSharedItem || !currentSharedProjectData) return;
+        const url = window.location.href;
         if (navigator.share) {
             try {
                 await navigator.share({
@@ -302,15 +328,54 @@
         }
     }
 
+    // Handle initial load with ID
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = urlParams.get('id');
+        if (idParam) {
+            const projId = parseInt(idParam, 10);
+            const proj = projectsData.find(p => p.id === projId);
+            if (proj) {
+                openProjectModal(proj, false);
+            }
+        }
+    });
+
+    let currentCategoryFilter = 'all';
+
     function filterSections(category, btn) {
         // Update active chip
         document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
+        if (btn) btn.classList.add('active');
+        currentCategoryFilter = category;
 
-        // Filter sections
+        performSearch();
+    }
+
+    function performSearch() {
+        const searchInput = document.getElementById('search-input');
+        const query = searchInput ? searchInput.value.toLowerCase() : '';
         const sections = document.querySelectorAll('.category-section');
+
         sections.forEach(sec => {
-            if (category === 'all' || sec.dataset.category === category) {
+            let sectionHasVisibleProjects = false;
+            const categoryMatch = currentCategoryFilter === 'all' || sec.dataset.category === currentCategoryFilter;
+
+            const projects = sec.querySelectorAll('.project-card');
+            projects.forEach(card => {
+                const title = card.querySelector('.project-title').textContent.toLowerCase();
+                const desc = card.querySelector('.project-desc').textContent.toLowerCase();
+                const textMatch = title.includes(query) || desc.includes(query);
+
+                if (textMatch && categoryMatch) {
+                    card.style.display = 'flex';
+                    sectionHasVisibleProjects = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (categoryMatch && sectionHasVisibleProjects) {
                 sec.style.display = 'block';
             } else {
                 sec.style.display = 'none';
@@ -318,42 +383,50 @@
         });
     }
 </script>
-    <style>
-        /* ... existing styles ... */
-        .project-modal {
-            border: none;
-            border-radius: 16px;
-            padding: 0;
-            max-width: 800px;
-            width: 90%;
-            background: transparent;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        .project-modal::backdrop {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-        }
-        .project-modal-content {
-            background: #ffffff; /* Explicitly White Background */
-            color: #1e293b;      /* Dark text for contrast on white */
-            padding: 2rem;
-            border-radius: 16px;
-            position: relative;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .project-modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #64748b;
-        }
-        .project-modal-close:hover { color: #0f172a; }
-    </style>
+<style>
+    /* ... existing styles ... */
+    .project-modal {
+        border: none;
+        border-radius: 16px;
+        padding: 0;
+        max-width: 800px;
+        width: 90%;
+        background: transparent;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .project-modal::backdrop {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+    }
+
+    .project-modal-content {
+        background: #ffffff;
+        /* Explicitly White Background */
+        color: #1e293b;
+        /* Dark text for contrast on white */
+        padding: 2rem;
+        border-radius: 16px;
+        position: relative;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    .project-modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: #64748b;
+    }
+
+    .project-modal-close:hover {
+        color: #0f172a;
+    }
+</style>
 
     </main>
 

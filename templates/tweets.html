@@ -9,14 +9,22 @@
 </section>
 
 <div class="container" style="max-width: 700px;">
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1rem;">
+        <input type="text" id="search-input" placeholder="Search tweets..."
+            style="width: 100%; padding: 0.75rem 1.25rem; border-radius: 99px; border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary); outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--color-accent)'" onblur="this.style.borderColor='var(--color-border)'"
+            oninput="performSearch()">
+    </div>
+
     <div class="filter-container">
-        <button class="filter-chip active" onclick="filterItems('all', '.tweet-card')">All</button>
+        <button class="filter-chip active" onclick="filterItemsWithSearch('all', this)">All</button>
         {% set categories = [] %}
         {% for t in tweets %}
-            {% if t.category and t.category not in categories %}
-                {% set _ = categories.append(t.category) %}
-                <button class="filter-chip" onclick="filterItems('{{ t.category }}', '.tweet-card')">{{ t.category }}</button>
-            {% endif %}
+        {% if t.category and t.category not in categories %}
+        {% set _ = categories.append(t.category) %}
+        <button class="filter-chip" onclick="filterItemsWithSearch('{{ t.category }}', this)">{{ t.category }}</button>
+        {% endif %}
         {% endfor %}
     </div>
 
@@ -24,19 +32,22 @@
     <div class="card tweet-card" data-category="{{ tweet.category }}">
         <div class="tweet-header">
             <div class="tweet-avatar">
-                <img src="{{ profile.avatar_url or '/assets/img/avatar-placeholder.png' }}" alt="{{ profile.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="{{ profile.avatar_url or '/assets/img/avatar-placeholder.png' }}" alt="{{ profile.name }}"
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="tweet-meta">
                 <span class="tweet-name">{{ profile.name }}</span>
                 <span class="tweet-date">{{ tweet.date }}</span>
-                <span style="font-size: 12px; color: var(--color-accent); margin-left: 0.5rem;">{{ tweet.category }}</span>
+                <span style="font-size: 12px; color: var(--color-accent); margin-left: 0.5rem;">{{ tweet.category
+                    }}</span>
             </div>
         </div>
         <div class="tweet-content">
             {{ tweet.content }}
         </div>
         {% if tweet.content|length > 200 %}
-        <button onclick="showTweetDetail(this)" class="btn-text" style="font-size: 13px; margin-top: 0.5rem; color: var(--color-accent);">Read More</button>
+        <button onclick="showTweetDetail(this)" class="btn-text"
+            style="font-size: 13px; margin-top: 0.5rem; color: var(--color-accent);">Read More</button>
         <div class="full-content" style="display: none;">
             <div class="tweet-header">
                 <div class="tweet-avatar">...</div> <!-- Simplified avatar for modal -->
@@ -67,6 +78,34 @@
         const rawMarkdown = fullContent.querySelector('.markdown-body').innerText;
         const htmlContent = fullContent.innerHTML.replace(rawMarkdown, marked.parse(rawMarkdown));
         openModal(htmlContent);
+    }
+
+    let currentCategoryFilter = 'all';
+
+    function filterItemsWithSearch(category, btn) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        currentCategoryFilter = category;
+        performSearch();
+    }
+
+    function performSearch() {
+        const searchInput = document.getElementById('search-input');
+        const query = searchInput ? searchInput.value.toLowerCase() : '';
+        const items = document.querySelectorAll('.tweet-card');
+
+        items.forEach(item => {
+            const content = item.querySelector('.tweet-content').textContent.toLowerCase();
+            const cat = item.dataset.category || '';
+            const categoryMatch = currentCategoryFilter === 'all' || cat === currentCategoryFilter;
+            const textMatch = content.includes(query) || cat.toLowerCase().includes(query);
+
+            if (categoryMatch && textMatch) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     }
 </script>
 {% endblock %}

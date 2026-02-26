@@ -45,6 +45,14 @@
 </style>
 
 <div class="container">
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1rem;">
+        <input type="text" id="search-input" placeholder="Search projects..."
+            style="width: 100%; max-width: 400px; padding: 0.75rem 1.25rem; border-radius: 99px; border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary); outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--color-accent)'" onblur="this.style.borderColor='var(--color-border)'"
+            oninput="performSearch()">
+    </div>
+
     <!-- Filter Chips -->
     <div class="filter-container" style="margin-bottom: 2rem;">
         <button class="filter-chip active" onclick="filterSections('all', this)">All</button>
@@ -123,9 +131,6 @@
             <button onclick="shareItem('project')" class="btn-primary"
                 style="border: none; cursor: pointer; display: inline-block; text-decoration: none; color: white; background: #22c55e; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Copy
                 Link</button>
-            <a id="modal-link" href="#" target="_blank" class="btn-primary"
-                style="display: none; text-decoration: none; color: white; background: #475569; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Visit
-                Website</a>
         </div>
     </div>
 </dialog>
@@ -159,14 +164,6 @@
             document.getElementById('modal-body').innerHTML = marked.parse(rawContent);
         } else {
             document.getElementById('modal-body').innerHTML = rawContent.replace(/\n/g, '<br>');
-        }
-
-        const linkBtn = document.getElementById('modal-link');
-        if (project.link) {
-            linkBtn.href = project.link;
-            linkBtn.style.display = 'inline-block';
-        } else {
-            linkBtn.style.display = 'none';
         }
 
         if (updateUrl) {
@@ -224,15 +221,41 @@
         }
     });
 
+    let currentCategoryFilter = 'all';
+
     function filterSections(category, btn) {
         // Update active chip
         document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
+        if (btn) btn.classList.add('active');
+        currentCategoryFilter = category;
 
-        // Filter sections
+        performSearch();
+    }
+
+    function performSearch() {
+        const searchInput = document.getElementById('search-input');
+        const query = searchInput ? searchInput.value.toLowerCase() : '';
         const sections = document.querySelectorAll('.category-section');
+
         sections.forEach(sec => {
-            if (category === 'all' || sec.dataset.category === category) {
+            let sectionHasVisibleProjects = false;
+            const categoryMatch = currentCategoryFilter === 'all' || sec.dataset.category === currentCategoryFilter;
+
+            const projects = sec.querySelectorAll('.project-card');
+            projects.forEach(card => {
+                const title = card.querySelector('.project-title').textContent.toLowerCase();
+                const desc = card.querySelector('.project-desc').textContent.toLowerCase();
+                const textMatch = title.includes(query) || desc.includes(query);
+
+                if (textMatch && categoryMatch) {
+                    card.style.display = 'flex';
+                    sectionHasVisibleProjects = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (categoryMatch && sectionHasVisibleProjects) {
                 sec.style.display = 'block';
             } else {
                 sec.style.display = 'none';
