@@ -155,7 +155,7 @@
 <!-- BLOG DETAIL MODAL -->
 <dialog id="blog-detail-modal" class="detail-modal">
     <div class="detail-modal-content">
-        <button class="detail-modal-close" onclick="document.getElementById('blog-detail-modal').close()">&times;</button>
+        <button class="detail-modal-close" onclick="closeBlogModal()">&times;</button>
         <div class="detail-header" style="margin-bottom: 1rem;">
             <span id="modal-date" class="date-badge"></span>
             <span id="modal-category" class="tech-badge" style="background: #f1f5f9; color: #475569;"></span>
@@ -170,9 +170,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
+    const blogsData = {{ blogs|tojson }};
     let currentSharedBlog = null;
 
-    function openBlogDetail(blog) {
+    function openBlogDetail(blog, updateUrl = true) {
         currentSharedBlog = blog;
         const modal = document.getElementById('blog-detail-modal');
         document.getElementById('modal-title').textContent = blog.title;
@@ -186,7 +187,18 @@
              document.getElementById('modal-body').innerHTML = content.replace(/\n/g, '<br>');
         }
         
+        if (updateUrl) {
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + blog.id;
+            window.history.pushState({path: newUrl}, '', newUrl);
+        }
+        
         modal.showModal();
+    }
+    
+    function closeBlogModal() {
+        document.getElementById('blog-detail-modal').close();
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({path: newUrl}, '', newUrl);
     }
     
     async function shareBlog() {
@@ -209,7 +221,22 @@
     }
 
     document.getElementById('blog-detail-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'blog-detail-modal') document.getElementById('blog-detail-modal').close();
+        if (e.target.id === 'blog-detail-modal') {
+            closeBlogModal();
+        }
+    });
+
+    // Handle initial load with ID
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = urlParams.get('id');
+        if (idParam) {
+            const blogId = parseInt(idParam, 10);
+            const blog = blogsData.find(b => b.id === blogId);
+            if (blog) {
+                openBlogDetail(blog, false);
+            }
+        }
     });
 </script>
 {% endblock %}
