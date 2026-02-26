@@ -67,8 +67,11 @@
         
         <div class="projects-grid">
             {% for project in items %}
-            <article class="project-card" onclick='openProjectModal({{ project|tojson }})' style="cursor: pointer;">
-                <div class="card-content">
+            <article class="project-card card" onclick='openProjectModal({{ project|tojson }})' style="cursor: pointer; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                {% if project.cover_url %}
+                <div style="width: 100%; height: 160px; background-image: url('{{ project.cover_url }}'); background-size: cover; background-position: center; border-bottom: 1px solid var(--color-border);"></div>
+                {% endif %}
+                <div class="card-content" style="padding: 1.5rem;">
                     <h3 class="project-title" style="margin-top: 0;">{{ project.title }}</h3>
                     <p class="project-desc">{{ project.description }}</p>
                 </div>
@@ -79,31 +82,42 @@
     {% endfor %}
 </div>
 
-<!-- PROJECT DETAIL MODAL -->
 <dialog id="project-modal" class="project-modal">
     <div class="project-modal-content">
         <button class="project-modal-close" onclick="closeProjectModal()">&times;</button>
+        <img id="modal-cover" src="" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem; display: none;">
         <h2 id="modal-title" style="margin-top: 0; font-size: 2rem; color: #0f172a;"></h2>
         <div style="margin-bottom: 1rem;">
             <span id="modal-category" class="tech-badge" style="background: #e2e8f0; color: #475569;"></span>
         </div>
         <div id="modal-body" style="line-height: 1.6;"></div>
-        <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
-            <a id="modal-link" href="#" target="_blank" class="btn-primary" style="display: inline-block; text-decoration: none; color: white; background: #22c55e; padding: 0.5rem 1.5rem; border-radius: 99px;">View Project</a>
+        <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="shareItem('project')" class="btn-primary" style="border: none; cursor: pointer; display: inline-block; text-decoration: none; color: white; background: #22c55e; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Copy Link</button>
+            <a id="modal-link" href="#" target="_blank" class="btn-primary" style="display: none; text-decoration: none; color: white; background: #475569; padding: 0.5rem 1.5rem; border-radius: 99px; font-size: 14px;">Visit Website</a>
         </div>
     </div>
 </dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
+    let currentSharedItem = null;
+
     function openProjectModal(project) {
+        currentSharedItem = { title: project.title, text: project.description };
         const modal = document.getElementById('project-modal');
+        const coverImg = document.getElementById('modal-cover');
         document.getElementById('modal-title').textContent = project.title;
         document.getElementById('modal-category').textContent = project.category;
         
+        if (project.cover_url) {
+            coverImg.src = project.cover_url;
+            coverImg.style.display = 'block';
+        } else {
+            coverImg.style.display = 'none';
+            coverImg.src = "";
+        }
+        
         // Use Details if available, else Description. Convert newlines to <br> for simple formatting
-        // content could also be markdown if we used the editor. 
-        // Let's try to use marked if available, otherwise fallback.
         const rawContent = project.details || project.description || "";
         
         if (typeof marked !== 'undefined') {
@@ -134,6 +148,26 @@
             closeProjectModal();
         }
     });
+
+    async function shareItem() {
+        if (!currentSharedItem) return;
+        const url = window.location.href; 
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: currentSharedItem.title,
+                    text: currentSharedItem.text,
+                    url: url
+                });
+            } catch (err) {
+                console.log('Share cancelled or error', err);
+            }
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+    }
 
     function filterSections(category, btn) {
         // Update active chip

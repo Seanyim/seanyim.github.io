@@ -8,6 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        // Init theme immediately to prevent flash
+        const savedTheme = localStorage.getItem('theme') || 'system';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        if (savedTheme === 'system') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            if (prefersDark.matches) {
+                document.documentElement.classList.add('system-dark');
+            }
+        }
+    </script>
     <style>
         /* Modal Styles */
         .modal-overlay {
@@ -44,6 +56,27 @@
         .filter-chip:hover, .filter-chip.active {
             background: rgba(34,197,94,0.15); color: var(--color-accent); border-color: var(--color-accent);
         }
+
+        /* Dropdown Styles */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-menu {
+            display: none; position: absolute; right: 0; top: 100%; margin-top: 0.5rem;
+            background: var(--color-bg-card); border: 1px solid var(--color-border);
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 0.5rem; z-index: 2000; min-width: 150px;
+            backdrop-filter: blur(10px);
+            opacity: 0; transform: translateY(-10px); transition: opacity 0.2s, transform 0.2s;
+        }
+        .dropdown.open .dropdown-menu { display: block; opacity: 1; transform: translateY(0); }
+        .dropdown-item {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+            color: var(--color-text-primary); text-decoration: none; border-radius: 8px;
+            cursor: pointer; transition: background 0.2s; font-size: 14px;
+        }
+        .dropdown-item:hover, .dropdown-item.active { background: rgba(255,255,255,0.05); }
+        .dropdown-item.active { color: var(--color-accent); }
+        .dropdown-item svg { width: 16px; height: 16px; opacity: 0.7; }
+        .dropdown-item.active svg { opacity: 1; stroke: var(--color-accent); }
     </style>
 </head>
 <body>
@@ -56,6 +89,27 @@
                 <a href="work.html" class="nav-link ">Work</a>
                 <a href="blogs.html" class="nav-link ">Blogs</a>
                 <a href="tweets.html" class="nav-link active">Tweets</a>
+                <div class="dropdown" id="theme-dropdown-container">
+                    <button onclick="toggleThemeDropdown(event)" id="theme-toggle" style="background:none; border:none; color:var(--color-text-secondary); cursor:pointer; font-size:18px; padding:6px; display:flex; align-items:center;" aria-label="Toggle Theme">
+                        <svg id="theme-icon-system" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                        <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                    </button>
+                    <div class="dropdown-menu" id="theme-dropdown">
+                        <div class="dropdown-item" onclick="setTheme('system')" data-theme-val="system">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                            System
+                        </div>
+                        <div class="dropdown-item" onclick="setTheme('light')" data-theme-val="light">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                            Light
+                        </div>
+                        <div class="dropdown-item" onclick="setTheme('dark')" data-theme-val="dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                            Dark
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -76,14 +130,16 @@
         
             
                 
+                <button class="filter-chip" onclick="filterItems('General', '.tweet-card')">General</button>
+            
+        
+            
+                
                 <button class="filter-chip" onclick="filterItems('tech', '.tweet-card')">tech</button>
             
         
             
         
-            
-                
-                <button class="filter-chip" onclick="filterItems('General', '.tweet-card')">General</button>
             
         
             
@@ -95,6 +151,23 @@
         
     </div>
 
+    
+    <div class="card tweet-card" data-category="General">
+        <div class="tweet-header">
+            <div class="tweet-avatar">
+                <img src="/assets/img/avatar.jpeg" alt="Sean " style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+            </div>
+            <div class="tweet-meta">
+                <span class="tweet-name">Sean </span>
+                <span class="tweet-date">2026-02-26 16:26</span>
+                <span style="font-size: 12px; color: var(--color-accent); margin-left: 0.5rem;">General</span>
+            </div>
+        </div>
+        <div class="tweet-content">
+            Now, my web updates some fancy things! Check it out!
+        </div>
+        
+    </div>
     
     <div class="card tweet-card" data-category="tech">
         <div class="tweet-header">
@@ -248,6 +321,70 @@
                 }
             });
         }
+
+        function toggleThemeDropdown(event) {
+            document.getElementById('theme-dropdown-container').classList.toggle('open');
+            event.stopPropagation();
+        }
+
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('theme-dropdown-container');
+            if (dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        const prefersDarkMedia = window.matchMedia('(prefers-color-scheme: dark)');
+        prefersDarkMedia.addEventListener('change', (e) => {
+            if (localStorage.getItem('theme') === 'system' || !localStorage.getItem('theme')) {
+                if (e.matches) {
+                    document.documentElement.classList.add('system-dark');
+                } else {
+                    document.documentElement.classList.remove('system-dark');
+                }
+            }
+        });
+
+        // Theme Toggle Logic
+        function updateThemeIcon() {
+            const currentTheme = localStorage.getItem('theme') || 'system';
+            document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
+            const activeItem = document.querySelector(`.dropdown-item[data-theme-val="${currentTheme}"]`);
+            if (activeItem) activeItem.classList.add('active');
+
+            document.getElementById('theme-icon-moon').style.display = 'none';
+            document.getElementById('theme-icon-sun').style.display = 'none';
+            document.getElementById('theme-icon-system').style.display = 'none';
+
+            if (currentTheme === 'light') {
+                document.getElementById('theme-icon-sun').style.display = 'block';
+            } else if (currentTheme === 'dark') {
+                document.getElementById('theme-icon-moon').style.display = 'block';
+            } else {
+                document.getElementById('theme-icon-system').style.display = 'block';
+            }
+        }
+
+        function setTheme(newTheme) {
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'system') {
+                if (prefersDarkMedia.matches) {
+                    document.documentElement.classList.add('system-dark');
+                } else {
+                    document.documentElement.classList.remove('system-dark');
+                }
+            } else {
+                document.documentElement.classList.remove('system-dark');
+            }
+            
+            updateThemeIcon();
+            document.getElementById('theme-dropdown-container').classList.remove('open');
+        }
+
+        // Run once on mount to set correct icon
+        updateThemeIcon();
     </script>
 </body>
 </html>

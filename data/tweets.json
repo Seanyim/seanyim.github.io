@@ -1,9 +1,15 @@
 [
     {
-        "id": 1771565453016,
-        "content": "Web is now able to auto-update",
+        "id": 1772094418044,
+        "content": "Now, my web updates some fancy things! Check it out!",
+        "category": "General",
+        "date": "2026-02-26 16:26"
+    },
+    {
         "category": "tech",
-        "date": "2026-02-20 13:30"
+        "content": "Web is now able to auto-update",
+        "date": "2026-02-20 13:30",
+        "id": 1771565453016
     },
     {
         "category": "tech",
