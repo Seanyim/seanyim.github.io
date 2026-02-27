@@ -23,6 +23,10 @@ def build():
     projects = load_json('projects.json')
     blogs = load_json('blogs.json')
     tweets = load_json('tweets.json')
+
+    # Sort data by date (newest first)
+    projects.sort(key=lambda x: x.get('date', ''), reverse=True)
+    blogs.sort(key=lambda x: x.get('date', ''), reverse=True)
     
     # 2. Setup Template Engine
     env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
