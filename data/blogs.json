@@ -1,1 +1,16 @@
-[{"id": 1, "category": "Tech", "title": "Welcome to my new site!", "date": "2026-02-10", "content": "Refactoring complete with Streamlit."}]
+[
+    {
+        "id": 1,
+        "category": "Tech",
+        "title": "Welcome to my new site!",
+        "date": "2026-02-10",
+        "content": "Refactoring complete with Streamlit."
+    },
+    {
+        "id": 2,
+        "category": "Tech",
+        "title": "Building My Digital Space: The Architecture and Tech Stack",
+        "date": "2026-02-27",
+        "content": "### The Journey to a Bespoke Portfolio\n\nWhen I decided to revamp my personal website, I had a clear goal: keep it fast, minimal, and entirely under my control. Instead of reaching for heavy frameworks or CMS platforms, I built a custom **Static Site Generator (SSG)** using Python and Jinja2.\n\n### The Tech Stack\n\n- **Core Logic:** Python 3\n- **Templating Engine:** Jinja2 (for modularity and reusability)\n- **Styling:** Pure CSS with CSS Variables (Design Tokens)\n- **Content Management:** JSON-based data store\n- **Hosting:** GitHub Pages\n\n### Why a Custom SSG?\n\nBy using `build.py`, I can transform structured JSON data into clean HTML pages in milliseconds. This approach separates the content (stored in `data/*.json`) from the presentation (stored in `templates/*.html`). This means adding a new blog post or a project is as simple as updating a JSON file and running a command.\n\n### Design Philosophy\n\nI opted for a \"Code Dark\" aesthetic, using a deep palette (`#0F172A`) paired with tech-green accents (`#22C55E`). The site supports system-aware theme switching, ensuring a comfortable reading experience whether you prefer light or dark mode.\n\n### Features\n\n- **Dynamic Modals:** Project details and blog posts open in smooth, accessible modals without page reloads.\n- **Expandable Search:** A minimalist search bar that stays hidden until you need it, keeping the UI clean.\n- **Responsive Design:** A mobile-first approach that adapts to any screen size.\n\nBuilding this site wasn't just about having a place to show my work; it was about practicing the philosophy of building lean, efficient, and maintainable software."
+    }
+]
