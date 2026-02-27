@@ -46,11 +46,12 @@
 
 <div class="container">
     <!-- Search Bar -->
-    <div style="margin-bottom: 1rem;">
-        <input type="text" id="search-input" placeholder="Search projects..."
-            style="width: 100%; max-width: 400px; padding: 0.75rem 1.25rem; border-radius: 99px; border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary); outline: none; transition: border-color 0.2s;"
-            onfocus="this.style.borderColor='var(--color-accent)'" onblur="this.style.borderColor='var(--color-border)'"
-            oninput="performSearch()">
+    <div id="search-wrapper" class="search-wrapper">
+        <button class="search-icon-btn" onclick="toggleSearch()" aria-label="Toggle search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        <input type="text" id="search-input" class="search-input-alt" placeholder="Search projects..."
+            oninput="performSearch()" onblur="handleSearchBlur()">
     </div>
 
     <!-- Filter Chips -->

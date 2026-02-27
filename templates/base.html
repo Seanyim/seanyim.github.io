@@ -231,6 +231,33 @@
             document.getElementById('theme-dropdown-container').classList.remove('open');
         }
 
+        function toggleSearch() {
+            const wrapper = document.getElementById('search-wrapper');
+            const input = document.getElementById('search-input');
+            if (!wrapper || !input) return;
+            
+            if (wrapper.classList.contains('active')) {
+                wrapper.classList.remove('active');
+                input.value = "";
+                // Trigger search to reset view
+                if (typeof performSearch === 'function') performSearch();
+                input.blur();
+            } else {
+                wrapper.classList.add('active');
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+
+        function handleSearchBlur() {
+            const wrapper = document.getElementById('search-wrapper');
+            const input = document.getElementById('search-input');
+            if (!wrapper || !input) return;
+            
+            if (input.value === "") {
+                wrapper.classList.remove('active');
+            }
+        }
+
         // Run once on mount to set correct icon
         updateThemeIcon();
     </script>

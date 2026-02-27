@@ -146,7 +146,7 @@
 
 <section class="container about-section">
     <h2>About</h2>
-    <p>Hi, I&#39;m Sean Yim. I&#39;m a software engineer passionate about building beautiful, functional, and scalable applications. I specialize in Python, Streamlit, and modern web technologies. I love turning complex problems into simple, elegant solutions.</p>
+    <p>Hi, I'm Sean Yim. I'm a software engineer passionate about building beautiful, functional, and scalable applications. I specialize in Python, Streamlit, and modern web technologies. I love turning complex problems into simple, elegant solutions.</p>
     <a href="work.html" class="btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         View My Work
@@ -266,6 +266,33 @@
             
             updateThemeIcon();
             document.getElementById('theme-dropdown-container').classList.remove('open');
+        }
+
+        function toggleSearch() {
+            const wrapper = document.getElementById('search-wrapper');
+            const input = document.getElementById('search-input');
+            if (!wrapper || !input) return;
+            
+            if (wrapper.classList.contains('active')) {
+                wrapper.classList.remove('active');
+                input.value = "";
+                // Trigger search to reset view
+                if (typeof performSearch === 'function') performSearch();
+                input.blur();
+            } else {
+                wrapper.classList.add('active');
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+
+        function handleSearchBlur() {
+            const wrapper = document.getElementById('search-wrapper');
+            const input = document.getElementById('search-input');
+            if (!wrapper || !input) return;
+            
+            if (input.value === "") {
+                wrapper.classList.remove('active');
+            }
         }
 
         // Run once on mount to set correct icon

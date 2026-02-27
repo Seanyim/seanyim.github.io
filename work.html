@@ -161,11 +161,12 @@
 
 <div class="container">
     <!-- Search Bar -->
-    <div style="margin-bottom: 1rem;">
-        <input type="text" id="search-input" placeholder="Search projects..."
-            style="width: 100%; max-width: 400px; padding: 0.75rem 1.25rem; border-radius: 99px; border: 1px solid var(--color-border); background: var(--color-bg-card); color: var(--color-text-primary); outline: none; transition: border-color 0.2s;"
-            onfocus="this.style.borderColor='var(--color-accent)'" onblur="this.style.borderColor='var(--color-border)'"
-            oninput="performSearch()">
+    <div id="search-wrapper" class="search-wrapper">
+        <button class="search-icon-btn" onclick="toggleSearch()" aria-label="Toggle search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        <input type="text" id="search-input" class="search-input-alt" placeholder="Search projects..."
+            oninput="performSearch()" onblur="handleSearchBlur()">
     </div>
 
     <!-- Filter Chips -->
@@ -227,7 +228,7 @@
                 
                 <div class="card-content" style="padding: 1.5rem;">
                     <h3 class="project-title" style="margin-top: 0;">Market Alpha AI</h3>
-                    <p class="project-desc">Quantitative Analysis &amp; Sentiment Engine for high-frequency trading markets.</p>
+                    <p class="project-desc">Quantitative Analysis & Sentiment Engine for high-frequency trading markets.</p>
                 </div>
             </article>
             
@@ -541,6 +542,33 @@
             
             updateThemeIcon();
             document.getElementById('theme-dropdown-container').classList.remove('open');
+        }
+
+        function toggleSearch() {
+            const wrapper = document.getElementById('search-wrapper');
+            const input = document.getElementById('search-input');
+            if (!wrapper || !input) return;
+            
+            if (wrapper.classList.contains('active')) {
+                wrapper.classList.remove('active');
+                input.value = "";
+                // Trigger search to reset view
+                if (typeof performSearch === 'function') performSearch();
+                input.blur();
+            } else {
+                wrapper.classList.add('active');
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+
+        function handleSearchBlur() {
+            const wrapper = document.getElementById('search-wrapper');
+            const input = document.getElementById('search-input');
+            if (!wrapper || !input) return;
+            
+            if (input.value === "") {
+                wrapper.classList.remove('active');
+            }
         }
 
         // Run once on mount to set correct icon
